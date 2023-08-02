@@ -1,6 +1,6 @@
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -21,14 +21,24 @@ const Header = () => {
           <div className="collapse navbar-collapse" id="navContent">
             <ul className="navbar-nav ms-auto">
               <li className="nav-item">
-                <Link to="/cart" className="nav-link">
+                <NavLink
+                  to="/cart"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
                   <FaShoppingCart /> Cart
-                </Link>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <Link to="/login" className="nav-link">
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
                   <FaUser /> Sign In
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
