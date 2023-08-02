@@ -5,7 +5,9 @@ const App = () => {
   return (
     <>
       <Header />
-      <Outlet />
+      <main className="container py-3">
+        <Outlet />
+      </main>
       <Footer />
     </>
   );
