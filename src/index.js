@@ -10,20 +10,24 @@ import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CartScreen from "./screens/CartScreen";
 import LoginScreen from "./screens/LoginScreen";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />}>
-          <Route index element={<HomeScreen />}></Route>
-          <Route path="product/:id" element={<ProductScreen />} />
-          <Route path="/cart" element={<CartScreen />} />
-          <Route path="/login" element={<LoginScreen />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<App />}>
+            <Route index element={<HomeScreen />}></Route>
+            <Route path="product/:id" element={<ProductScreen />} />
+            <Route path="/cart" element={<CartScreen />} />
+            <Route path="/login" element={<LoginScreen />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 

@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
 import Product from "../components/Product";
-import axios from "axios";
-
+import { useGetProductsQuery } from "../slices/productsApiSlice";
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get("/api/products");
-      setProducts(data);
-    };
-
-    fetchProducts();
-  }, []);
-
+  const { data: products, isLoading, error } = useGetProductsQuery();
   return (
     <>
-      <h1>Latest Products</h1>
-      <div className="row">
-        {products.map((product) => (
-          <div
-            className="col-sm-12 col-md-6 col-lg-4 col-xl-3"
-            key={product._id}
-          >
-            <Product product={product} />
+      {isLoading ? (
+        <div>Loading ...</div>
+      ) : error ? (
+        <div>{error?.data.message || error.error} </div>
+      ) : (
+        <>
+          <h1>Latest Products</h1>
+          <div className="row">
+            {products.map((product) => (
+              <div
+                className="col-sm-12 col-md-6 col-lg-4 col-xl-3"
+                key={product._id}
+              >
+                <Product product={product} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </>
   );
 };
