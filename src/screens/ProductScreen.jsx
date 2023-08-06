@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -12,9 +14,14 @@ const ProductScreen = () => {
   return (
     <>
       {isLoading ? (
-        <div>Loading ...</div>
+        <Loader />
       ) : error ? (
-        <div>{error?.data.message || error.error}</div>
+        <div>
+          {" "}
+          <Message variant="danger">
+            {error?.data?.message || error.error}
+          </Message>
+        </div>
       ) : (
         <>
           <Link to="/" className="btn btn-light my-3">
