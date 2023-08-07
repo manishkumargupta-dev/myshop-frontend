@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import { useState } from "react";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
+  const [qty, setQty] = useState(1);
   const {
     data: product,
     isLoading,
@@ -67,6 +69,30 @@ const ProductScreen = () => {
                       </div>
                     </div>
                   </li>
+
+                  {product.countInStock > 0 && (
+                    <li className="list-group-item">
+                      <div className="row">
+                        <div className="col">Qty</div>
+                        <div className="col">
+                          <select
+                            className="form-select shadow-none border-secondary"
+                            value={qty}
+                            onChange={(e) => setQty(Number(e.target.value))}
+                          >
+                            {Array(product.countInStock)
+                              .fill()
+                              .map((v, i) => i + 1)
+                              .map((x) => (
+                                <option key={x} value={x}>
+                                  {x}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
+                      </div>
+                    </li>
+                  )}
 
                   <li className="list-group-item">
                     <div className="d-grid">
