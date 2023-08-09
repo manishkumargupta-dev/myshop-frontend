@@ -4,10 +4,21 @@ import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import cartSlice from "../slices/cartSlice";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
+
+  const { addToCart } = cartSlice.actions;
+  const dispatch = useDispatch();
+
   const [qty, setQty] = useState(1);
+
+  const addToCartHandler = () => {
+    dispatch(addToCart({ ...product, qty }));
+  };
+
   const {
     data: product,
     isLoading,
@@ -95,11 +106,12 @@ const ProductScreen = () => {
                   )}
 
                   <li className="list-group-item">
-                    <div className="d-grid">
+                    <div className="d-grid my-2">
                       <button
                         className="btn btn-secondary"
                         type="button"
                         disabled={product.countInStock === 0}
+                        onClick={addToCartHandler}
                       >
                         Add To Cart
                       </button>
