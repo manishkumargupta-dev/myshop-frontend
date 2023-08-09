@@ -4,19 +4,26 @@ import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import cartSlice from "../slices/cartSlice";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
 
-  const { addToCart } = cartSlice.actions;
+  const { addToCart, removeFromCart } = cartSlice.actions;
   const dispatch = useDispatch();
-
+  const { cartItems } = useSelector((state) => state.cart);
+  const foundInCart = cartItems.find((item) => item._id === productId)
+    ? true
+    : false;
   const [qty, setQty] = useState(1);
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
+  };
+
+  const removeFromCartHandler = () => {
+    dispatch(removeFromCart(productId));
   };
 
   const {
@@ -116,6 +123,18 @@ const ProductScreen = () => {
                         Add To Cart
                       </button>
                     </div>
+                    {foundInCart && (
+                      <div className="d-grid">
+                        <button
+                          className="btn btn-danger"
+                          type="button"
+                          disabled={product.countInStock === 0}
+                          onClick={removeFromCartHandler}
+                        >
+                          Remove From Cart
+                        </button>
+                      </div>
+                    )}
                   </li>
                 </ul>
               </div>
