@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGetProductDetailsQuery } from "../slices/productsApiSlice";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -12,6 +12,7 @@ const ProductScreen = () => {
 
   const { addToCart, removeFromCart } = cartSlice.actions;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
   const foundInCart = cartItems.find((item) => item._id === productId)
     ? true
@@ -20,10 +21,12 @@ const ProductScreen = () => {
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
+    navigate("/cart");
   };
 
   const removeFromCartHandler = () => {
     dispatch(removeFromCart(productId));
+    navigate("/cart");
   };
 
   const {
