@@ -14,10 +14,9 @@ const ProductScreen = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
-  const foundInCart = cartItems.find((item) => item._id === productId)
-    ? true
-    : false;
-  const [qty, setQty] = useState(1);
+  const foundInCart = cartItems.find((item) => item._id === productId);
+
+  const [qty, setQty] = useState(foundInCart ? foundInCart.qty : 1);
 
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
@@ -71,7 +70,7 @@ const ProductScreen = () => {
               </ul>
             </div>
             <div className="col-md-3">
-              <div className="card">
+              <div className="card shadow">
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item">
                     <div className="row">
