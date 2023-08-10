@@ -1,8 +1,10 @@
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import logo from "../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const { cartItems } = useSelector((state) => state.cart);
   return (
     <header>
       <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -28,6 +30,11 @@ const Header = () => {
                   }
                 >
                   <FaShoppingCart /> Cart
+                  {cartItems.length > 0 && (
+                    <span className="badge bg-success rounded-pill ms-1">
+                      {cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                    </span>
+                  )}
                 </NavLink>
               </li>
               <li className="nav-item">
