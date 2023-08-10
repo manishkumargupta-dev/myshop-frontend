@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Message from "./../components/Message";
 import { FaTrash } from "react-icons/fa";
 import cartSlice from "../slices/cartSlice";
@@ -9,6 +9,7 @@ const CartScreen = () => {
   const { cartItems } = cart;
   const { addToCart, removeFromCart } = cartSlice.actions;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const addToCartHandler = (item, qty) => {
     dispatch(addToCart({ ...item, qty }));
@@ -17,6 +18,11 @@ const CartScreen = () => {
   const removeFromCartHandler = (productId) => {
     dispatch(removeFromCart(productId));
   };
+
+  const checkoutHandler = () => {
+    navigate("/login?redirect=/shipping");
+  };
+
   return (
     <>
       <h1 className="mb-3">Shopping Cart</h1>
@@ -92,7 +98,18 @@ const CartScreen = () => {
                   <div className="col-6">${cart.itemsPrice}</div>
                 </div>
               </li>
-              <li className="list-group-item">checkout</li>
+              <li className="list-group-item">
+                <div className="d-grid ">
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    disabled={cartItems.length === 0}
+                    onClick={checkoutHandler}
+                  >
+                    Proceed To Checkout
+                  </button>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
