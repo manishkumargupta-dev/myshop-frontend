@@ -7,8 +7,12 @@ import cartSlice from "../slices/cartSlice";
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-  const { removeFromCart } = cartSlice.actions;
+  const { addToCart, removeFromCart } = cartSlice.actions;
   const dispatch = useDispatch();
+
+  const addToCartHandler = (item, qty) => {
+    dispatch(addToCart({ ...item, qty }));
+  };
 
   const removeFromCartHandler = (productId) => {
     dispatch(removeFromCart(productId));
@@ -41,7 +45,24 @@ const CartScreen = () => {
                       </Link>
                     </div>
                     <div className="col-md-2 ">${item.price}</div>
-                    <div className="col-md-2 ">qty</div>
+                    <div className="col-md-2 ">
+                      <select
+                        className="form-select shadow-none border-secondary"
+                        value={item.qty}
+                        onChange={(e) =>
+                          addToCartHandler(item, Number(e.target.value))
+                        }
+                      >
+                        {Array(item.countInStock)
+                          .fill()
+                          .map((v, i) => i + 1)
+                          .map((x) => (
+                            <option key={x} value={x}>
+                              {x}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
                     <div className="col-md-2 ">
                       <button
                         className="btn btn-light"
