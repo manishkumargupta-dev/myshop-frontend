@@ -1,10 +1,18 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Message from "./../components/Message";
+import { FaTrash } from "react-icons/fa";
+import cartSlice from "../slices/cartSlice";
 
 const CartScreen = () => {
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const { removeFromCart } = cartSlice.actions;
+  const dispatch = useDispatch();
+
+  const removeFromCartHandler = (productId) => {
+    dispatch(removeFromCart(productId));
+  };
   return (
     <>
       <h1 className="mb-3">Shopping Cart</h1>
@@ -34,7 +42,15 @@ const CartScreen = () => {
                     </div>
                     <div className="col-md-2 ">${item.price}</div>
                     <div className="col-md-2 ">qty</div>
-                    <div className="col-md-2 ">delete</div>
+                    <div className="col-md-2 ">
+                      <button
+                        className="btn btn-light"
+                        type="button"
+                        onClick={() => removeFromCartHandler(item._id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 </li>
               ))}
