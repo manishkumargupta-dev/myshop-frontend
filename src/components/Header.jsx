@@ -1,10 +1,28 @@
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import logo from "../assets/logo.png";
 import { Link, NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../slices/userApiSlice";
+import authSlice from "../slices/authSlice";
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state) => state.auth);
+  const { deleteCredentials } = authSlice.actions;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [logout] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logout().unwrap();
+      dispatch(deleteCredentials());
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <header>
       <nav className="navbar navbar-expand-lg bg-dark navbar-dark">
@@ -37,16 +55,37 @@ const Header = () => {
                   )}
                 </NavLink>
               </li>
-              <li className="nav-item">
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
-                >
-                  <FaUser /> Sign In
-                </NavLink>
-              </li>
+              {userInfo ? (
+                <>
+                  <li className="nav-item dropdown">
+                    <Link
+                      className="nav-link dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                    >
+                      {userInfo.name}
+                    </Link>
+                    <div className="dropdown-menu">
+                      <Link className="dropdown-item" to="/profile">
+                        Profile
+                      </Link>
+                      <Link className="dropdown-item" onClick={logoutHandler}>
+                        Logout
+                      </Link>
+                    </div>
+                  </li>
+                </>
+              ) : (
+                <li className="nav-item">
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    <FaUser /> Sign In
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </div>
